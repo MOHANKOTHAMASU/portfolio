@@ -744,6 +744,34 @@
     }
   };
 
+  // Zoom & Pan State
+  let currentZoomIndex = 0;
+  const zoomLevels = [100, 140, 180, 220];
+  const protoScrollWrapper = document.getElementById('proto-scroll-wrapper');
+  const protoZoomInBtn = document.getElementById('proto-zoom-in-btn');
+  const protoZoomOutBtn = document.getElementById('proto-zoom-out-btn');
+  const protoZoomFitBtn = document.getElementById('proto-zoom-fit-btn');
+  const protoZoomBadge = document.getElementById('proto-zoom-level-badge');
+  const protoFullscreenLink = document.getElementById('proto-fullscreen-link');
+
+  function applyZoom(index) {
+    currentZoomIndex = Math.max(0, Math.min(zoomLevels.length - 1, index));
+    const zoomVal = zoomLevels[currentZoomIndex];
+
+    if (protoZoomBadge) {
+      protoZoomBadge.textContent = `${zoomVal}%`;
+    }
+
+    if (protoActiveImg) {
+      protoActiveImg.style.width = zoomVal === 100 ? '100%' : `${zoomVal}%`;
+      protoActiveImg.style.maxWidth = zoomVal === 100 ? '100%' : 'none';
+    }
+
+    if (protoZoomFitBtn) {
+      protoZoomFitBtn.innerHTML = zoomVal > 100 ? '<i class="fa-solid fa-compress"></i> <span>Fit Screen</span>' : '<i class="fa-solid fa-maximize"></i> <span>Expand 140%</span>';
+    }
+  }
+
   function openPrototypeModal(projId, viewType) {
     if (!prototypeModal) return;
     currentProtoProject = projId || 'irrigation';
@@ -752,6 +780,13 @@
     prototypeModal.classList.add('active');
     prototypeModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+
+    // If architecture blueprint, default to comfortable 140% detail zoom for immediate readability
+    if (currentProtoView === 'architecture') {
+      applyZoom(1); // 140%
+    } else {
+      applyZoom(0); // 100%
+    }
 
     renderPrototypeModalContent();
   }
@@ -767,6 +802,14 @@
     currentProtoView = viewType;
     if (protoTabHardware) protoTabHardware.classList.toggle('active', viewType === 'hardware');
     if (protoTabArchitecture) protoTabArchitecture.classList.toggle('active', viewType === 'architecture');
+    
+    // Auto-expand architecture blueprints to 140% for clear schematic inspection
+    if (viewType === 'architecture') {
+      applyZoom(1);
+    } else {
+      applyZoom(0);
+    }
+
     renderPrototypeModalContent();
   }
 
@@ -775,7 +818,7 @@
     const viewData = data[currentProtoView] || data.hardware;
 
     if (protoTitleEl) {
-      protoTitleEl.textContent = `${data.title} — ${currentProtoView === 'hardware' ? 'Prototype Build' : 'System Architecture'}`;
+      protoTitleEl.textContent = `${data.title} — ${currentProtoView === 'hardware' ? 'Prototype Build' : 'System Architecture Blueprint'}`;
     }
 
     if (protoActiveImg) {
@@ -783,8 +826,12 @@
       protoActiveImg.alt = `${data.title} ${viewData.tag}`;
     }
 
+    if (protoFullscreenLink) {
+      protoFullscreenLink.href = viewData.img;
+    }
+
     if (protoCaptionTag) {
-      protoCaptionTag.innerHTML = currentProtoView === 'hardware' ? '<i class="fa-solid fa-camera"></i> Physical Hardware Build' : '<i class="fa-solid fa-diagram-project"></i> Overall System Schematic';
+      protoCaptionTag.innerHTML = currentProtoView === 'hardware' ? '<i class="fa-solid fa-camera"></i> Physical Hardware Build' : '<i class="fa-solid fa-diagram-project"></i> Overall System Schematic Blueprint';
     }
 
     if (protoCaptionText) {
@@ -799,6 +846,69 @@
         </div>
       `).join('');
     }
+
+    // Center scroll on blueprint when opened
+    if (protoScrollWrapper) {
+      protoScrollWrapper.scrollLeft = 0;
+      protoScrollWrapper.scrollTop = 0;
+    }
+  }
+
+  // Zoom Button Listeners
+  if (protoZoomInBtn) {
+    protoZoomInBtn.addEventListener('click', () => applyZoom(currentZoomIndex + 1));
+  }
+
+  if (protoZoomOutBtn) {
+    protoZoomOutBtn.addEventListener('click', () => applyZoom(currentZoomIndex - 1));
+  }
+
+  if (protoZoomFitBtn) {
+    protoZoomFitBtn.addEventListener('click', () => {
+      if (currentZoomIndex === 0) {
+        applyZoom(1); // 140%
+      } else {
+        applyZoom(0); // 100%
+      }
+    });
+  }
+
+  // Mouse Drag-To-Pan Support for easy schematic navigation
+  if (protoScrollWrapper) {
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let scrollLeft = 0, scrollTop = 0;
+
+    protoScrollWrapper.addEventListener('mousedown', (e) => {
+      if (currentZoomIndex === 0) return; // Don't drag if 100% fit
+      isDragging = true;
+      protoScrollWrapper.classList.add('dragging');
+      startX = e.pageX - protoScrollWrapper.offsetLeft;
+      startY = e.pageY - protoScrollWrapper.offsetTop;
+      scrollLeft = protoScrollWrapper.scrollLeft;
+      scrollTop = protoScrollWrapper.scrollTop;
+    });
+
+    protoScrollWrapper.addEventListener('mouseleave', () => {
+      isDragging = false;
+      protoScrollWrapper.classList.remove('dragging');
+    });
+
+    protoScrollWrapper.addEventListener('mouseup', () => {
+      isDragging = false;
+      protoScrollWrapper.classList.remove('dragging');
+    });
+
+    protoScrollWrapper.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - protoScrollWrapper.offsetLeft;
+      const y = e.pageY - protoScrollWrapper.offsetTop;
+      const walkX = (x - startX) * 1.5;
+      const walkY = (y - startY) * 1.5;
+      protoScrollWrapper.scrollLeft = scrollLeft - walkX;
+      protoScrollWrapper.scrollTop = scrollTop - walkY;
+    });
   }
 
   openProtoBtns.forEach(btn => {

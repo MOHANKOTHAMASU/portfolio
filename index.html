@@ -2021,9 +2021,34 @@ dev = <span class="code-class">SoftwareDeveloper</span>()
 
       <!-- Modal Body -->
       <div class="modal-body prototype-modal-body">
-        <!-- Interactive Image Stage with Zoom Click -->
+        <!-- Blueprint Zoom & Inspection Toolbar -->
+        <div class="proto-toolbar-row">
+          <div class="proto-hint-text">
+            <i class="fa-solid fa-arrows-up-down-left-right text-primary"></i> 
+            <span><strong>High-Resolution Blueprint:</strong> Use scrollbars or buttons below to zoom & pan across schematics.</span>
+          </div>
+          <div class="proto-zoom-controls">
+            <button type="button" class="btn-zoom" id="proto-zoom-out-btn" title="Zoom Out (–)">
+              <i class="fa-solid fa-magnifying-glass-minus"></i>
+            </button>
+            <span class="zoom-level-badge" id="proto-zoom-level-badge">100%</span>
+            <button type="button" class="btn-zoom" id="proto-zoom-in-btn" title="Zoom In (+)">
+              <i class="fa-solid fa-magnifying-glass-plus"></i>
+            </button>
+            <button type="button" class="btn-zoom btn-zoom-fit" id="proto-zoom-fit-btn" title="Toggle 150% Detailed Inspection">
+              <i class="fa-solid fa-maximize"></i> <span>Expand 150%</span>
+            </button>
+            <a href="assets/irrigation_architecture.jpg" target="_blank" rel="noopener noreferrer" class="btn-zoom" id="proto-fullscreen-link" title="Open Full-Resolution Image in New Tab">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Full Tab
+            </a>
+          </div>
+        </div>
+
+        <!-- Interactive Image Stage with Scrollbars -->
         <div class="proto-image-stage" id="proto-image-container">
-          <img id="proto-active-img" src="assets/irrigation_prototype.jpg" alt="Project Prototype Hardware View" class="proto-display-img">
+          <div class="proto-scroll-wrapper" id="proto-scroll-wrapper">
+            <img id="proto-active-img" src="assets/irrigation_prototype.jpg" alt="Project Prototype Hardware View" class="proto-display-img zoom-100">
+          </div>
           <div class="proto-image-caption" id="proto-img-caption">
             <span class="caption-tag" id="proto-caption-tag"><i class="fa-solid fa-microchip"></i> Physical Hardware Build</span>
             <p id="proto-caption-text">Electromechanical prototype bench featuring four-bar valve actuator, level sensor, and submersible pump controller.</p>
