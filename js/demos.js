@@ -661,9 +661,184 @@
     shoeGraphicEl.addEventListener('click', triggerPiezoStep);
   }
 
+  // ==========================================================================
+  // PROJECT PROTOTYPE & ARCHITECTURE LIGHTBOX VIEWER
+  // ==========================================================================
+  const prototypeModal = document.getElementById('prototype-modal');
+  const protoCloseBtn = document.getElementById('prototype-modal-close-btn');
+  const protoTitleEl = document.getElementById('proto-modal-title');
+  const protoActiveImg = document.getElementById('proto-active-img');
+  const protoCaptionTag = document.getElementById('proto-caption-tag');
+  const protoCaptionText = document.getElementById('proto-caption-text');
+  const protoSpecsList = document.getElementById('proto-specs-list');
+  const protoTabHardware = document.getElementById('proto-tab-hardware');
+  const protoTabArchitecture = document.getElementById('proto-tab-architecture');
+  const openProtoBtns = document.querySelectorAll('.open-prototype-btn, .open-prototype-trigger');
+
+  let currentProtoProject = 'irrigation';
+  let currentProtoView = 'hardware'; // 'hardware' | 'architecture'
+
+  const projectData = {
+    irrigation: {
+      title: 'Smart Autonomous Irrigation System',
+      hardware: {
+        img: 'assets/irrigation_prototype.jpg',
+        tag: 'Physical Hardware Prototype Build',
+        caption: 'Bench-tested electromechanical prototype unit with four-bar linkage valve actuator, submersible pump control circuit, and collection level probe.'
+      },
+      architecture: {
+        img: 'assets/irrigation_architecture.jpg',
+        tag: 'Complete System Architecture Blueprint',
+        caption: 'Full technical schematic: Borewell source -> Pump relay -> Main line -> 4-Bar distributor valves -> Crop rows -> Level sensor -> Safety timer fallback loop.'
+      },
+      specs: [
+        { label: 'Control Unit', val: 'Embedded Microcontroller + Dual Relay Array' },
+        { label: 'Actuation Mechanism', val: 'Four-Bar Planar Kinematic Linkage Valve' },
+        { label: 'Sensing Technology', val: 'Conductive Multi-Threshold Water Level Probe' },
+        { label: 'Fail-Safe Subsystem', val: '15-Minute Hardware Watchdog Timer Fallback' },
+        { label: 'Pumping Dispatch', val: '12V DC High-Flow Submersible Impeller Pump' },
+        { label: 'Target Application', val: 'Automated 1-Acre Multi-Crop Precision Agriculture' }
+      ]
+    },
+    airquality: {
+      title: 'Low-Cost IoT Air Quality Monitoring System',
+      hardware: {
+        img: 'assets/airquality_prototype.jpg',
+        tag: 'Hardware Telemetry Prototype Node',
+        caption: 'Calibrated ESP32 microcontroller board wired on custom carrier with MQ-2, MQ-7, MQ-135 sensors, DHT11, 0.96" OLED display, and RGB status LEDs.'
+      },
+      architecture: {
+        img: 'assets/airquality_architecture.jpg',
+        tag: 'IoT Telemetry & Processing Architecture',
+        caption: 'Hardware-to-Cloud flow: Multi-gas sensors -> 12-bit ADC level shifters -> ESP32 AQI algorithm -> Local OLED / RGB LEDs -> MQTT Cloud Telemetry.'
+      },
+      specs: [
+        { label: 'Main MCU Node', val: 'ESP32-WROOM-32 Dual-Core (240MHz, Wi-Fi/BLE)' },
+        { label: 'Gas Sensor Array', val: 'MQ-2 (Smoke/LPG), MQ-7 (CO), MQ-135 (Air Toxins/NH3)' },
+        { label: 'Climate Telemetry', val: 'DHT11 Calibrated Temperature & Humidity Sensor' },
+        { label: 'Visual Interface', val: '0.96" I2C Monochrome OLED Screen + 5mm RGB Alert LED' },
+        { label: 'Algorithm Engine', val: 'EPA-Weighted Composite Air Quality Index (AQI)' },
+        { label: 'Target Environments', val: 'Hospitals, Research Laboratories, School Classrooms' }
+      ]
+    },
+    piezo: {
+      title: 'Piezoelectric Footwear Energy Generation',
+      hardware: {
+        img: 'assets/piezo_footwear_prototype.jpg',
+        tag: 'Wearable Energy Harvesting Prototype',
+        caption: 'Footwear insole embedded with 4 circular brass piezoelectric ceramic discs, wired to bridge rectifier, smoothing capacitor, Arduino UNO, and 16x2 LCD.'
+      },
+      architecture: {
+        img: 'assets/piezo_architecture.jpg',
+        tag: 'Energy Conversion & Telemetry Schematic',
+        caption: 'Kinetic circuit schematic: Footstep mechanical pressure -> Piezo AC pulse -> Full-wave diode bridge -> 470µF Tank Capacitor -> Arduino ADC & 16x2 LCD.'
+      },
+      specs: [
+        { label: 'Energy Transducers', val: '4x 35mm PZT Piezoelectric Ceramic Brass Discs' },
+        { label: 'Rectification Bench', val: 'Full-Wave 1N4007 Diode Bridge (AC-to-DC Conversion)' },
+        { label: 'Storage Reservoir', val: '470µF 25V Low-ESR Electrolytic Tank Capacitor' },
+        { label: 'Microcontroller', val: 'Arduino UNO (ATmega328P ADC Voltage Monitoring)' },
+        { label: 'Digital Readout', val: 'HD44780 16x2 Liquid Crystal Character Display (LCD)' },
+        { label: 'Power Application', val: 'Self-Powered Wearable Emergency Power for Sensors & LEDs' }
+      ]
+    }
+  };
+
+  function openPrototypeModal(projId, viewType) {
+    if (!prototypeModal) return;
+    currentProtoProject = projId || 'irrigation';
+    currentProtoView = viewType || 'hardware';
+
+    prototypeModal.classList.add('active');
+    prototypeModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    renderPrototypeModalContent();
+  }
+
+  function closePrototypeModal() {
+    if (!prototypeModal) return;
+    prototypeModal.classList.remove('active');
+    prototypeModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function switchPrototypeView(viewType) {
+    currentProtoView = viewType;
+    if (protoTabHardware) protoTabHardware.classList.toggle('active', viewType === 'hardware');
+    if (protoTabArchitecture) protoTabArchitecture.classList.toggle('active', viewType === 'architecture');
+    renderPrototypeModalContent();
+  }
+
+  function renderPrototypeModalContent() {
+    const data = projectData[currentProtoProject] || projectData.irrigation;
+    const viewData = data[currentProtoView] || data.hardware;
+
+    if (protoTitleEl) {
+      protoTitleEl.textContent = `${data.title} — ${currentProtoView === 'hardware' ? 'Prototype Build' : 'System Architecture'}`;
+    }
+
+    if (protoActiveImg) {
+      protoActiveImg.src = viewData.img;
+      protoActiveImg.alt = `${data.title} ${viewData.tag}`;
+    }
+
+    if (protoCaptionTag) {
+      protoCaptionTag.innerHTML = currentProtoView === 'hardware' ? '<i class="fa-solid fa-camera"></i> Physical Hardware Build' : '<i class="fa-solid fa-diagram-project"></i> Overall System Schematic';
+    }
+
+    if (protoCaptionText) {
+      protoCaptionText.textContent = viewData.caption;
+    }
+
+    if (protoSpecsList) {
+      protoSpecsList.innerHTML = data.specs.map(item => `
+        <div class="proto-spec-item">
+          <span class="spec-label">${item.label}:</span>
+          <span class="spec-value">${item.val}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  openProtoBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const proj = btn.getAttribute('data-project') || 'irrigation';
+      openPrototypeModal(proj, 'hardware');
+    });
+  });
+
+  if (protoCloseBtn) {
+    protoCloseBtn.addEventListener('click', closePrototypeModal);
+  }
+
+  if (prototypeModal) {
+    prototypeModal.addEventListener('click', (e) => {
+      if (e.target === prototypeModal) {
+        closePrototypeModal();
+      }
+    });
+  }
+
+  if (protoTabHardware) {
+    protoTabHardware.addEventListener('click', () => switchPrototypeView('hardware'));
+  }
+
+  if (protoTabArchitecture) {
+    protoTabArchitecture.addEventListener('click', () => switchPrototypeView('architecture'));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && prototypeModal && prototypeModal.classList.contains('active')) {
+      closePrototypeModal();
+    }
+  });
+
   // Initial UI updates
   updateIrrigationUI();
   updateAirQualityDashboard();
   updatePiezoUI();
 
 })();
+
