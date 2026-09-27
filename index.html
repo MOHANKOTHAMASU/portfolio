@@ -564,11 +564,10 @@ dev = <span class="code-class">SoftwareDeveloper</span>()
         <div class="projects-grid">
           <!-- Project 1: Smart Autonomous Irrigation System -->
           <div class="project-card">
-            <div class="project-banner project-banner-image open-prototype-trigger" data-project="irrigation" title="Click to view high-resolution hardware prototype and architecture diagram">
+            <div class="project-banner project-banner-image">
               <img src="assets/irrigation_prototype.jpg" alt="Smart Autonomous Irrigation System Prototype" class="project-banner-img" loading="lazy">
               <div class="project-overlay">
                 <span class="project-category-tag"><i class="fa-solid fa-seedling"></i> Automation & IoT</span>
-                <span class="banner-zoom-hint"><i class="fa-solid fa-expand"></i> View Prototype & Architecture</span>
               </div>
             </div>
 
@@ -628,11 +627,10 @@ dev = <span class="code-class">SoftwareDeveloper</span>()
 
           <!-- Project 2: IoT Air Quality Monitoring System -->
           <div class="project-card">
-            <div class="project-banner project-banner-image open-prototype-trigger" data-project="airquality" title="Click to view high-resolution hardware prototype and architecture diagram">
+            <div class="project-banner project-banner-image">
               <img src="assets/airquality_prototype.jpg" alt="IoT Air Quality Monitoring System Prototype" class="project-banner-img" loading="lazy">
               <div class="project-overlay">
                 <span class="project-category-tag"><i class="fa-solid fa-wind"></i> IoT & Environmental</span>
-                <span class="banner-zoom-hint"><i class="fa-solid fa-expand"></i> View Prototype & Architecture</span>
               </div>
             </div>
 
@@ -697,11 +695,10 @@ dev = <span class="code-class">SoftwareDeveloper</span>()
 
           <!-- Project 3: Piezoelectric Power Generation Footwear -->
           <div class="project-card">
-            <div class="project-banner project-banner-image open-prototype-trigger" data-project="piezo" title="Click to view high-resolution hardware prototype and architecture diagram">
+            <div class="project-banner project-banner-image">
               <img src="assets/piezo_footwear_prototype.jpg" alt="Piezoelectric Footwear Power Generation Prototype" class="project-banner-img" loading="lazy">
               <div class="project-overlay">
                 <span class="project-category-tag"><i class="fa-solid fa-bolt"></i> Green Energy & Embedded</span>
-                <span class="banner-zoom-hint"><i class="fa-solid fa-expand"></i> View Prototype & Architecture</span>
               </div>
             </div>
 
@@ -1982,75 +1979,6 @@ dev = <span class="code-class">SoftwareDeveloper</span>()
                 <p>Arduino UNO ADC tracks accumulated potential and renders real-time energy output on LCD.</p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Project Prototype & System Architecture Lightbox Modal -->
-  <div class="modal-backdrop prototype-modal-backdrop" id="prototype-modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal-dialog prototype-modal-dialog">
-      <!-- Modal Top Header -->
-      <div class="modal-header prototype-modal-header">
-        <div class="proto-modal-title-group">
-          <span class="proto-badge"><i class="fa-solid fa-microchip"></i> HARDWARE & SYSTEM SCHEMATIC</span>
-          <h3 class="modal-title" id="proto-modal-title">Project Prototype & Architecture</h3>
-        </div>
-        <button class="modal-close-btn" id="prototype-modal-close-btn" aria-label="Close prototype modal">&times;</button>
-      </div>
-
-      <!-- View Switcher Tabs: Prototype Photo vs System Architecture Diagram -->
-      <div class="proto-view-switcher">
-        <button type="button" class="proto-tab-btn active" id="proto-tab-hardware" data-view="hardware">
-          <i class="fa-solid fa-camera"></i> Hardware Prototype View
-        </button>
-        <button type="button" class="proto-tab-btn" id="proto-tab-architecture" data-view="architecture">
-          <i class="fa-solid fa-diagram-project"></i> Overall System Architecture
-        </button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="modal-body prototype-modal-body">
-        <!-- Blueprint Zoom & Inspection Toolbar -->
-        <div class="proto-toolbar-row">
-          <div class="proto-hint-text">
-            <i class="fa-solid fa-arrows-up-down-left-right text-primary"></i> 
-            <span><strong>High-Resolution Blueprint:</strong> Use scrollbars or buttons below to zoom & pan across schematics.</span>
-          </div>
-          <div class="proto-zoom-controls">
-            <button type="button" class="btn-zoom" id="proto-zoom-out-btn" title="Zoom Out (–)">
-              <i class="fa-solid fa-magnifying-glass-minus"></i>
-            </button>
-            <span class="zoom-level-badge" id="proto-zoom-level-badge">100%</span>
-            <button type="button" class="btn-zoom" id="proto-zoom-in-btn" title="Zoom In (+)">
-              <i class="fa-solid fa-magnifying-glass-plus"></i>
-            </button>
-            <button type="button" class="btn-zoom btn-zoom-fit" id="proto-zoom-fit-btn" title="Toggle 150% Detailed Inspection">
-              <i class="fa-solid fa-maximize"></i> <span>Expand 150%</span>
-            </button>
-            <a href="assets/irrigation_architecture.jpg" target="_blank" rel="noopener noreferrer" class="btn-zoom" id="proto-fullscreen-link" title="Open Full-Resolution Image in New Tab">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Full Tab
-            </a>
-          </div>
-        </div>
-
-        <!-- Interactive Image Stage with Scrollbars -->
-        <div class="proto-image-stage" id="proto-image-container">
-          <div class="proto-scroll-wrapper" id="proto-scroll-wrapper">
-            <img id="proto-active-img" src="assets/irrigation_prototype.jpg" alt="Project Prototype Hardware View" class="proto-display-img zoom-100">
-          </div>
-          <div class="proto-image-caption" id="proto-img-caption">
-            <span class="caption-tag" id="proto-caption-tag"><i class="fa-solid fa-microchip"></i> Physical Hardware Build</span>
-            <p id="proto-caption-text">Electromechanical prototype bench featuring four-bar valve actuator, level sensor, and submersible pump controller.</p>
-          </div>
-        </div>
-
-        <!-- Component & Engineering Specs Breakdown Box -->
-        <div class="proto-specs-card">
-          <h4 class="specs-title"><i class="fa-solid fa-list-check"></i> Subsystem Specifications & Components</h4>
-          <div class="specs-grid" id="proto-specs-list">
-            <!-- Dynamically populated by js/demos.js -->
           </div>
         </div>
       </div>
