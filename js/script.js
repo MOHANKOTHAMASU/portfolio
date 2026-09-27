@@ -22,10 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
       htmlRoot.setAttribute('data-theme', newTheme);
       localStorage.setItem('portfolio_theme', newTheme);
 
-      if (window.update3DSceneTheme) {
-        window.update3DSceneTheme(newTheme === 'dark');
-      }
-
       showToast(`Switched to ${newTheme} mode`, 'info');
     });
   }
@@ -259,23 +255,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const subject = subjectInput ? subjectInput.value.trim() || 'Software Developer Opportunity' : 'Software Developer Opportunity';
         const msgBody = messageInput.value.trim();
 
-        // Show friendly success toast
-        showToast(`Thank you, ${senderName}! Your message has been prepared.`, 'success');
+        const formattedEmailBody = `Hi Mohan,\n\nName: ${senderName}\nEmail: ${senderEmail}\n\nMessage:\n${msgBody}`;
 
-        // Optional mailto trigger to open user's default client with prefilled content
-        const mailtoUrl = `mailto:kmvsubbarao28@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Hi Mohan,\n\nName: ${senderName}\nEmail: ${senderEmail}\n\nMessage:\n${msgBody}`)}`;
+        // Gmail Web Compose direct URL
+        const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=kmvsubbarao28@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(formattedEmailBody)}`;
         
+        // Native Mailto fallback URL
+        const mailtoUrl = `mailto:kmvsubbarao28@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(formattedEmailBody)}`;
+
+        // Show friendly success toast
+        showToast(`Opening Gmail Compose for ${senderName}...`, 'success');
+
+        // Open Gmail in new tab, or fallback to mailto
+        const newWin = window.open(gmailComposeUrl, '_blank');
+        if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
+          // Popup blocked or mobile device: fallback to mailto link
+          window.location.href = mailtoUrl;
+        }
+
         // Reset form fields
         contactForm.reset();
-
-        // Provide easy option to send via mail client
-        setTimeout(() => {
-          if (confirm('Would you like to open your default email client to send this message directly to Mohan?')) {
-            window.location.href = mailtoUrl;
-          }
-        }, 400);
-
-      }, 900);
+      }, 700);
     });
 
     // Remove errors on input
@@ -312,317 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 300);
     }, 3500);
   }
-
-  // --------------------------------------------------------------------------
-  // 8. Interactive Three.js 3D Background Engine
-  // --------------------------------------------------------------------------
-  function init3DHeroBackground() {
-    const canvas = document.getElementById('hero-3d-canvas');
-    if (!canvas || typeof THREE === 'undefined') return;
-
-    const heroSection = document.getElementById('hero');
-    if (!heroSection) return;
-
-    // Create Scene, Camera, and Renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      heroSection.clientWidth / heroSection.clientHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 45;
-
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(heroSection.clientWidth, heroSection.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Particle Constellation Network
-    const particleCount = 140;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = [];
-
-    const xRange = 65;
-    const yRange = 40;
-    const zRange = 35;
-
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * xRange;
-      positions[i + 1] = (Math.random() - 0.5) * yRange;
-      positions[i + 2] = (Math.random() - 0.5) * zRange;
-
-      velocities.push({
-        x: (Math.random() - 0.5) * 0.04,
-        y: (Math.random() - 0.5) * 0.04,
-        z: (Math.random() - 0.5) * 0.03
-      });
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    // Theme color palette
-    const isDarkTheme = htmlRoot.getAttribute('data-theme') !== 'light';
-    let particleColor = isDarkTheme ? 0x60a5fa : 0x2563eb;
-    let lineColor = isDarkTheme ? 0x3b82f6 : 0x93c5fd;
-
-    // Particle Points Material
-    const pointMaterial = new THREE.PointsMaterial({
-      color: particleColor,
-      size: 2.2,
-      transparent: true,
-      opacity: 0.8,
-      blending: THREE.AdditiveBlending
-    });
-    const particleSystem = new THREE.Points(geometry, pointMaterial);
-    scene.add(particleSystem);
-
-    // Dynamic Connecting Lines
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: lineColor,
-      transparent: true,
-      opacity: 0.22,
-      blending: THREE.AdditiveBlending
-    });
-    const lineGeometry = new THREE.BufferGeometry();
-    const linePositions = new Float32Array(particleCount * particleCount * 3);
-    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-    const lineMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(lineMesh);
-
-    // Floating 3D Geometric Tech Polyhedrons
-    const polyhedrons = [];
-
-    // 1. Wireframe Icosahedron (Center-Right)
-    const icoGeo = new THREE.IcosahedronGeometry(7, 1);
-    const icoMat = new THREE.MeshBasicMaterial({
-      color: isDarkTheme ? 0x38bdf8 : 0x0284c7,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.28
-    });
-    const icosahedron = new THREE.Mesh(icoGeo, icoMat);
-    icosahedron.position.set(18, 5, -8);
-    scene.add(icosahedron);
-    polyhedrons.push({ mesh: icosahedron, rotX: 0.005, rotY: 0.007, rotZ: 0.003 });
-
-    // 2. Wireframe Torus (Bottom-Left)
-    const torusGeo = new THREE.TorusGeometry(6, 1.8, 12, 28);
-    const torusMat = new THREE.MeshBasicMaterial({
-      color: isDarkTheme ? 0xa78bfa : 0x7c3aed,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.22
-    });
-    const torus = new THREE.Mesh(torusGeo, torusMat);
-    torus.position.set(-22, -10, -12);
-    scene.add(torus);
-    polyhedrons.push({ mesh: torus, rotX: -0.006, rotY: 0.004, rotZ: 0.005 });
-
-    // 3. Wireframe Octahedron (Top-Left)
-    const octGeo = new THREE.OctahedronGeometry(4.5);
-    const octMat = new THREE.MeshBasicMaterial({
-      color: isDarkTheme ? 0x34d399 : 0x059669,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.25
-    });
-    const octahedron = new THREE.Mesh(octGeo, octMat);
-    octahedron.position.set(-18, 12, -6);
-    scene.add(octahedron);
-    polyhedrons.push({ mesh: octahedron, rotX: 0.008, rotY: -0.006, rotZ: 0.004 });
-
-    // 4. Glowing Center Ring (Depth)
-    const ringGeo = new THREE.RingGeometry(12, 12.4, 32);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: isDarkTheme ? 0x60a5fa : 0x3b82f6,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.15
-    });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.position.set(12, -2, -15);
-    scene.add(ring);
-    polyhedrons.push({ mesh: ring, rotX: 0.003, rotY: 0.005, rotZ: -0.002 });
-
-    // Interactive Mouse Tracking with Smooth Lerp
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    function onMouseMove(event) {
-      const rect = heroSection.getBoundingClientRect();
-      const clientX = event.clientX;
-      const clientY = event.clientY;
-
-      if (clientY >= rect.top && clientY <= rect.bottom) {
-        targetX = ((clientX - rect.left) / rect.width - 0.5) * 14;
-        targetY = -((clientY - rect.top) / rect.height - 0.5) * 14;
-      }
-    }
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
-
-    // Theme Switch Callback
-    window.update3DSceneTheme = (isDark) => {
-      const pCol = isDark ? 0x60a5fa : 0x2563eb;
-      const lCol = isDark ? 0x3b82f6 : 0x93c5fd;
-      pointMaterial.color.setHex(pCol);
-      lineMaterial.color.setHex(lCol);
-      icoMat.color.setHex(isDark ? 0x38bdf8 : 0x0284c7);
-      torusMat.color.setHex(isDark ? 0xa78bfa : 0x7c3aed);
-      octMat.color.setHex(isDark ? 0x34d399 : 0x059669);
-    };
-
-    // Viewport Visibility Observer to Pause when off-screen
-    let isHeroVisible = true;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          isHeroVisible = entry.isIntersecting;
-        });
-      },
-      { threshold: 0.05 }
-    );
-    observer.observe(heroSection);
-
-    // Animation Loop
-    let animId;
-    function animate() {
-      animId = requestAnimationFrame(animate);
-
-      if (!isHeroVisible) return;
-
-      // Smooth camera interpolation
-      mouseX += (targetX - mouseX) * 0.05;
-      mouseY += (targetY - mouseY) * 0.05;
-      camera.position.x = mouseX;
-      camera.position.y = mouseY;
-      camera.lookAt(0, 0, 0);
-
-      // Rotate geometric shapes
-      polyhedrons.forEach(p => {
-        p.mesh.rotation.x += p.rotX;
-        p.mesh.rotation.y += p.rotY;
-        p.mesh.rotation.z += p.rotZ;
-      });
-
-      // Update particle positions
-      const pAttr = geometry.attributes.position;
-      const posArr = pAttr.array;
-
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const v = velocities[i];
-
-        posArr[i3] += v.x;
-        posArr[i3 + 1] += v.y;
-        posArr[i3 + 2] += v.z;
-
-        // Bounce back inside boundaries
-        if (Math.abs(posArr[i3]) > xRange / 2) v.x = -v.x;
-        if (Math.abs(posArr[i3 + 1]) > yRange / 2) v.y = -v.y;
-        if (Math.abs(posArr[i3 + 2]) > zRange / 2) v.z = -v.z;
-      }
-      pAttr.needsUpdate = true;
-
-      // Connect nearby particles with dynamic lines
-      let lineIndex = 0;
-      const linePos = lineGeometry.attributes.position.array;
-      const connectDist = 11.5;
-
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        for (let j = i + 1; j < particleCount; j++) {
-          const j3 = j * 3;
-          const dx = posArr[i3] - posArr[j3];
-          const dy = posArr[i3 + 1] - posArr[j3 + 1];
-          const dz = posArr[i3 + 2] - posArr[j3 + 2];
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-          if (dist < connectDist) {
-            linePos[lineIndex++] = posArr[i3];
-            linePos[lineIndex++] = posArr[i3 + 1];
-            linePos[lineIndex++] = posArr[i3 + 2];
-
-            linePos[lineIndex++] = posArr[j3];
-            linePos[lineIndex++] = posArr[j3 + 1];
-            linePos[lineIndex++] = posArr[j3 + 2];
-          }
-        }
-      }
-      lineGeometry.setDrawRange(0, lineIndex / 3);
-      lineGeometry.attributes.position.needsUpdate = true;
-
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    // Resize Handler
-    function handleResize() {
-      if (!heroSection) return;
-      const width = heroSection.clientWidth;
-      const height = heroSection.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    }
-    window.addEventListener('resize', handleResize);
-  }
-
-  // --------------------------------------------------------------------------
-  // 9. True 3D Tilt & Dynamic Glare Physics Engine for Cards
-  // --------------------------------------------------------------------------
-  function init3DTiltCards() {
-    const tiltCards = document.querySelectorAll(
-      '.project-card, .skill-card, .cert-card, .stat-card, [data-tilt-3d]'
-    );
-
-    tiltCards.forEach(card => {
-      // Inject dynamic glare overlay if not present
-      if (!card.querySelector('.tilt-glare')) {
-        const glare = document.createElement('div');
-        glare.className = 'tilt-glare';
-        card.appendChild(glare);
-      }
-
-      const maxTilt = 12; // Maximum tilt angle in degrees
-
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const xPercent = (x / rect.width) * 100;
-        const yPercent = (y / rect.height) * 100;
-
-        // Calculate rotation angles
-        const rotateX = -((y / rect.height) - 0.5) * maxTilt * 2;
-        const rotateY = ((x / rect.width) - 0.5) * maxTilt * 2;
-
-        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.025, 1.025, 1.025)`;
-        card.style.setProperty('--glare-x', `${xPercent.toFixed(1)}%`);
-        card.style.setProperty('--glare-y', `${yPercent.toFixed(1)}%`);
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-      });
-
-      card.addEventListener('mouseenter', () => {
-        card.style.transition = 'transform 0.1s ease-out';
-      });
-    });
-  }
-
-  // Initialize 3D Engine and Tilt Systems
-  init3DHeroBackground();
-  init3DTiltCards();
 });
+
+
+
 
