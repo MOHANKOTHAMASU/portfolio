@@ -47,7 +47,7 @@ flowchart TB
 
     subgraph AssetLayer [Verified Artifacts & Document Store]
         PDF1[assets/nptel_iot_certificate.pdf]
-        PDF2[assets/aws_eduskills_cloud_certificate.pdf]
+        PDF2[assets/aws_eduskills_aiml_certificate.pdf]
         PDF3[assets/aicte_python_fullstack_certificate.pdf]
         PDF4[assets/tata_genai_data_analytics_certificate.pdf]
         PDF5[assets/aincat_rank_scorecard_certificate.pdf]
@@ -180,7 +180,7 @@ All certificates are statically hosted within the repository under [`assets/`](f
 | Credential Name | Issuing Organization | Verification Details | Direct Public Document |
 | :--- | :--- | :--- | :--- |
 | **Internet of Things (IoT)** | NPTEL / IIT | Score: 78% (Elite Category) | [nptel_iot_certificate.pdf](https://mohankothamasu.github.io/portfolio/assets/nptel_iot_certificate.pdf) |
-| **Cloud Computing Foundations** | AWS Academy / EduSkills | Cloud Architecture & Services | [aws_eduskills_cloud_certificate.pdf](https://mohankothamasu.github.io/portfolio/assets/aws_eduskills_cloud_certificate.pdf) |
+| **AI-ML Virtual Internship** | AWS Academy / AICTE – EduSkills | 10-Week Virtual Internship • Grade A (Very Good) • ID: 7c8b584366da4feb9c2c95bc38b2a0f9 | [aws_eduskills_aiml_certificate.pdf](https://mohankothamasu.github.io/portfolio/assets/aws_eduskills_aiml_certificate.pdf) |
 | **Python Full Stack Virtual Internship** | AICTE / Edunet Foundation | Full Stack Web & Python Engineering | [aicte_python_fullstack_certificate.pdf](https://mohankothamasu.github.io/portfolio/assets/aicte_python_fullstack_certificate.pdf) |
 | **GenAI / Data Analytics Job Simulation** | Tata / Forage | Analytics & Engineering Workflows | [tata_genai_data_analytics_certificate.pdf](https://mohankothamasu.github.io/portfolio/assets/tata_genai_data_analytics_certificate.pdf) |
 | **National Competitive Technical Assessment** | AINCAT | All-India Rank: 6000 | [aincat_rank_scorecard_certificate.pdf](https://mohankothamasu.github.io/portfolio/assets/aincat_rank_scorecard_certificate.pdf) |
@@ -221,7 +221,7 @@ Structured algorithmic practice is maintained across major coding platforms:
     |-- profile.jpg
     |-- resume-preview.html
     |-- nptel_iot_certificate.pdf
-    |-- aws_eduskills_cloud_certificate.pdf
+    |-- aws_eduskills_aiml_certificate.pdf
     |-- aicte_python_fullstack_certificate.pdf
     |-- tata_genai_data_analytics_certificate.pdf
     |-- aincat_rank_scorecard_certificate.pdf
