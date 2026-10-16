@@ -4967,3 +4967,82 @@ textarea.form-control {
   transform: scale(1.05);
   filter: brightness(1.05);
 }
+
+/* ==========================================================================
+   Print Stylesheet for Portfolio Main Page
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Hide interactive, animated, sticky, and decorative controls */
+  .navbar,
+  .mobile-toggle,
+  .hero-bg-glow,
+  .hero-visual,
+  .theme-btn,
+  .back-to-top-btn,
+  .toast-container,
+  .modal-backdrop,
+  .resume-glow,
+  .open-demo-btn,
+  .contact-form-card,
+  .footer-bottom,
+  .copy-btn,
+  .status-pill {
+    display: none !important;
+  }
+
+  /* Ensure links are cleanly styled and printable */
+  a {
+    color: #1e40af !important;
+    text-decoration: underline !important;
+  }
+
+  .section {
+    padding: 12px 0 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .card,
+  .project-card,
+  .cert-card,
+  .edu-card,
+  .skill-category-card,
+  .contact-info-card {
+    border: 1px solid #d1d5db !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 12px !important;
+    padding: 12px !important;
+  }
+
+  .btn {
+    border: 1px solid #1f2937 !important;
+    color: #1f2937 !important;
+  }
+}

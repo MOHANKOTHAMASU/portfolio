@@ -194,6 +194,112 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --------------------------------------------------------------------------
+  // 5b. Robust Automatic One-Click PDF Resume Downloader
+  // Forces direct save to Downloads folder across desktop & mobile browsers
+  // --------------------------------------------------------------------------
+  function downloadResumeFromBase64(filename = 'Mohan_Venkata_Subba_Rao_Resume.pdf') {
+    if (window.RESUME_PDF_BASE64) {
+      try {
+        const byteCharacters = atob(window.RESUME_PDF_BASE64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+          if (a.parentNode) a.parentNode.removeChild(a);
+        }, 2000);
+        showToast('Resume downloaded directly to your device!', 'success');
+        return true;
+      } catch (e) {
+        console.warn('Base64 blob conversion error:', e);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = 'data:application/pdf;base64,' + window.RESUME_PDF_BASE64;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          if (a.parentNode) a.parentNode.removeChild(a);
+        }, 2000);
+        showToast('Resume downloaded directly to your device!', 'success');
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async function triggerDirectDownload(url, filename) {
+    showToast('Starting resume download...', 'info');
+
+    // 1. Instant direct download via preloaded Base64 (works on file://, localhost, and live web)
+    if (downloadResumeFromBase64(filename)) {
+      return;
+    }
+
+    // 2. Fetch Blob fallback
+    try {
+      const response = await fetch(url, { cache: 'no-cache' });
+      if (!response.ok) {
+        throw new Error(`File request failed with status: ${response.status}`);
+      }
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const tempLink = document.createElement('a');
+      tempLink.style.display = 'none';
+      tempLink.href = blobUrl;
+      tempLink.download = filename;
+      document.body.appendChild(tempLink);
+      tempLink.click();
+
+      setTimeout(() => {
+        window.URL.revokeObjectURL(blobUrl);
+        if (tempLink.parentNode) {
+          tempLink.parentNode.removeChild(tempLink);
+        }
+      }, 2000);
+
+      showToast('Resume downloaded successfully to your device!', 'success');
+    } catch (err) {
+      console.warn('Direct Blob download failed, attempting native download:', err);
+      try {
+        const fallbackLink = document.createElement('a');
+        fallbackLink.href = url;
+        fallbackLink.download = filename;
+        document.body.appendChild(fallbackLink);
+        fallbackLink.click();
+        document.body.removeChild(fallbackLink);
+        showToast('Download started via browser fallback.', 'info');
+      } catch (fallbackErr) {
+        console.error('All download methods failed:', fallbackErr);
+        showToast('Error: Resume file could not be downloaded. Please try again or use View Resume.', 'info');
+      }
+    }
+  }
+
+  // Intercept all resume download links to guarantee direct automatic download
+  const resumeDownloadLinks = document.querySelectorAll('a[download]');
+  resumeDownloadLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const url = link.getAttribute('href');
+      const filename = link.getAttribute('download') || 'Mohan_Venkata_Subba_Rao_Resume.pdf';
+      if (url && url.toLowerCase().includes('.pdf')) {
+        e.preventDefault();
+        triggerDirectDownload(url, filename);
+      }
+    });
+  });
+
+  // --------------------------------------------------------------------------
   // 6. Interactive Contact Form with Validation & Feedback
   // --------------------------------------------------------------------------
   const contactForm = document.getElementById('contact-form');

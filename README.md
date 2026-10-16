@@ -273,3 +273,4 @@ Open the directory in VS Code, right-click `index.html`, and select **Open with 
 - **LinkedIn:** [linkedin.com/in/mohan-venkata-subba-rao-kothamasu-4464b433a](https://www.linkedin.com/in/mohan-venkata-subba-rao-kothamasu-4464b433a)
 - **GitHub:** [github.com/MOHANKOTHAMASU](https://github.com/MOHANKOTHAMASU)
 - **Online ATS Resume:** [View 1-Page Resume Preview](https://mohankothamasu.github.io/portfolio/assets/resume-preview.html)
+- **Direct PDF Resume:** [Download 1-Page Complete Resume (PDF)](https://mohankothamasu.github.io/portfolio/assets/Mohan_Venkata_Subba_Rao_Resume.pdf)
