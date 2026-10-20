@@ -4,7 +4,7 @@
 [![Repository](https://img.shields.io/badge/GitHub%20Repository-MOHANKOTHAMASU%2Fportfolio-181717?style=flat-square)](https://github.com/MOHANKOTHAMASU/portfolio)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Mohan%20Venkata%20Subba%20Rao-blue?style=flat-square)](https://www.linkedin.com/in/mohan-venkata-subba-rao-kothamasu-4464b433a)
 [![HackerRank](https://img.shields.io/badge/HackerRank-kmvsubbarao28-00EA64?style=flat-square)](https://www.hackerrank.com/profile/kmvsubbarao28)
-[![LeetCode](https://img.shields.io/badge/LeetCode-kmvsubbarao28-FFA116?style=flat-square)](https://leetcode.com/u/kmvsubbarao28/)
+[![LeetCode](https://img.shields.io/badge/LeetCode-Practice%20Profile-FFA116?style=flat-square)](https://leetcode.com/problemset/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](LICENSE)
 
 ---
@@ -198,7 +198,7 @@ Structured algorithmic practice is maintained across major coding platforms:
 | Platform | Profile URL | Focus Area |
 | :--- | :--- | :--- |
 | **HackerRank** | [hackerrank.com/profile/kmvsubbarao28](https://www.hackerrank.com/profile/kmvsubbarao28) | Python Problem Solving & SQL Query Challenges |
-| **LeetCode** | [leetcode.com/u/kmvsubbarao28](https://leetcode.com/u/kmvsubbarao28/) | Data Structures & Algorithmic Patterns |
+| **LeetCode** | [leetcode.com/problemset](https://leetcode.com/problemset/) | Data Structures & Algorithmic Patterns |
 | **GitHub** | [github.com/MOHANKOTHAMASU](https://github.com/MOHANKOTHAMASU) | Source Code, Assignments & Experimental Systems |
 
 ---
